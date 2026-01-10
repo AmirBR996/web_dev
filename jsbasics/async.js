@@ -51,4 +51,7 @@ fetch("https://500534234").then((res) => {
     return console.log(error)
 })
 
+// async await
+// async function
+
 
