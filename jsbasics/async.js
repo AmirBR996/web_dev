@@ -54,4 +54,33 @@ fetch("https://500534234").then((res) => {
 // async await
 // async function
 
+// fetch()
+const fetchpost = async() =>{ // if we add async to function it will return promise
+    const response = await fetch("http://example/45")
+    const data = await response.json()
+    console.log(data)
+}
+fetchpost()
+
+// using try and catch
+const fetch_post = async() =>{
+    try{
+    const response = await fetch("http://example/45")
+    const data = await response.json()
+    console.log(data)
+    }
+    catch(error){
+        console.log(error)
+    }
+    finally{
+        console.log("finally")
+    }
+}
+fetch_post()
+
+
+
+
+
+
 
