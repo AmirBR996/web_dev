@@ -1,0 +1,62 @@
+REST API
+API => Application Programming Interface
+REST => Representational State Transfer (architectural style)
+
+1. Stateless
+Each client request must contain all the information needed to process it.
+Server does NOT store client session data.
+Improves scalability and reliability.
+
+2. Resources
+Everything is treated as a resource (user, product, order, etc.).
+Each resource is identified using a URI (Uniform Resource Identifier).
+Example: /users, /products/10
+
+3. Uniform Resource Naming
+Use nouns (not verbs) for endpoints.
+Actions are performed using HTTP methods, not endpoint names.
+Example:
+  Correct: GET /users
+  Wrong:  GET /getUsers
+
+4. HTTP Methods
+GET    -> Retrieve data (read-only, no side effects)
+POST   -> Create a new resource
+PUT    -> Update entire resource
+PATCH  -> Update partial resource
+DELETE -> Remove a resource
+(Choose either PUT or PATCH for updates, not both)
+
+5. HTTP Status Codes
+Status codes indicate the result of the request.
+
+100–199 -> Informational
+Example: 100 Continue
+
+200–299 -> Success
+200 OK        -> Request successful
+201 Created   -> Resource created successfully
+204 No Content-> Success but no response body
+
+300–399 -> Redirection
+301 Moved Permanently
+302 Found
+
+400–499 -> Client Errors
+400 Bad Request        -> Invalid request format
+401 Unauthorized      -> Authentication required
+403 Forbidden         -> No permission to access
+404 Not Found         -> Resource does not exist
+409 Conflict          -> Duplicate or conflict data
+
+500–599 -> Server Errors
+500 Internal Server Error -> Server failure
+501 Not Implemented      -> Method not supported
+503 Service Unavailable  -> Server temporarily down
+
+Additional REST Principles
+- Client-Server Architecture
+- Cacheable responses (improves performance)
+- Layered system (security, load balancers)
+- Use JSON or XML (JSON is most common)
+- Versioning (e.g., /api/v1/users)
