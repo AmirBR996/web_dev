@@ -16,7 +16,6 @@ connectDb()
 // http server
 const server = http.createServer(app)
  
-
 // using users
 app.use('/users',userRoutes)
 
