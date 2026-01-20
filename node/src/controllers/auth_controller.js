@@ -57,19 +57,3 @@ export const login = async(req,res) =>{
 }
 
 // api(application programming interface) / controller
-
-// middleware
-// function => request object , response object and next function
-// why?
-// - if multiple controller have repeated logic then we can define middleware to reuse it
-// - can implement custom logic
-// - end request response cycle
-// - call next middleware
-
-// Types:
-// 1. Application level
-// 2. Route level
-// 3. Error handler
-
-
-
