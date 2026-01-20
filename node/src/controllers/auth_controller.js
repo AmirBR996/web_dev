@@ -15,7 +15,10 @@ export const register = async (req , res) =>{
         throw new Error("email is required");
     }
     if(!password){
-        throw new Error("password is required");
+        next ({
+           error : "Enter your password",
+           status : 201
+        })
     }
     const hashpass = await hashPassword(password)
     const user = await User.create({first_name , last_name , email , password:hashpass})
@@ -26,6 +29,7 @@ export const register = async (req , res) =>{
      res.status(500).json({
         message : error?.message || "something went wrong"
      })
+     next(error)
 }
 }
 // login
@@ -52,7 +56,8 @@ export const login = async(req,res) =>{
     }catch(error){
      res.status(500).json({
         message : error?.message || "something went wrong"
-     })
+     });
+     next(error)
 }
 }
 
