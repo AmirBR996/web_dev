@@ -1,29 +1,6 @@
-import mongoose from "mongoose"
-
-const userSchema = new mongoose.Schema({
-    first_name:{
-        type : String,
-        required : [true , "first name is required"]
-    },
-    last_name:{
-        type : String,
-        required : [true , "first name is required"] 
-    },
-    email:{
-        type : String,
-        required : [true , "last name is required"],
-        unique : [true , "user already exists with provided email"]
-    },
-    password:{
-        type : String,
-        minLength : 6,
-        required : [true , "Password is required"]
-    }
-},{timestamp:true})
-
-// model
- const User = mongoose.model("User" , userSchema)
-
+import  {hashPassword}  from "../utils/bcrypt.utils.js"
+import { comparePassword } from "../utils/bcrypt.utils.js"
+import User from "../models/user.model.js"
 // register user
 export const register = async (req , res) =>{
     try{
@@ -40,7 +17,8 @@ export const register = async (req , res) =>{
     if(!password){
         throw new Error("password is required");
     }
-    const user = await User.create({first_name , last_name , email , password})
+    const hashpass = await hashPassword(password)
+    const user = await User.create({first_name , last_name , email , password:hashpass})
     res.status(201).json({
         message : "Account created"
      })
@@ -51,10 +29,47 @@ export const register = async (req , res) =>{
 }
 }
 // login
-export const login = (req,res) =>{
-    res.status(201).json({
-        message : "Sucessfully login !"
-    })
+export const login = async(req,res) =>{
+    try{
+        const {email , password} = req.body;
+        if(!email){
+        throw new Error("email is required");
+        }
+        if(!password){
+        throw new Error("password is required");
+        }
+        const user = await User.findOne({email:email})
+        if(!user){
+            throw new Error("Invalid email or password")
+        }
+        const is_pass_matched = await comparePassword(password , user.password)
+        if(!is_pass_matched){
+            throw new Error("Invalid email or password")
+        }
+        res.status(201).json({
+            message : "Loggedin"
+        });
+    }catch(error){
+     res.status(500).json({
+        message : error?.message || "something went wrong"
+     })
 }
+}
+
+// api(application programming interface) / controller
+
+// middleware
+// function => request object , response object and next function
+// why?
+// - if multiple controller have repeated logic then we can define middleware to reuse it
+// - can implement custom logic
+// - end request response cycle
+// - call next middleware
+
+// Types:
+// 1. Application level
+// 2. Route level
+// 3. Error handler
+
 
 
