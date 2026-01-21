@@ -4,6 +4,7 @@ import express from 'express'
 import http from 'http'
 import authRoutes from "./routes/auth.routes.js"
 import userRoutes from "./routes/user.routes.js"
+import taskRoutes from "./routes/task.routes.js"
 import {connectDb} from "./config/db.config.js"
 import {errorHandler} from "./middlewares/errorhandler.middleware.js"
 // express app instance
@@ -32,6 +33,8 @@ const server = http.createServer(app)
 app.use('/users',userRoutes)
 // using auth
 app.use('/auth',authRoutes)
+// using task
+app.use("/task",taskRoutes)
 
 server.listen(8000 , ()=>{
     console.log("server is running at http://localhost:8000")

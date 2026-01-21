@@ -77,7 +77,7 @@ export const getByid = async(req, res , next) => {
 export const remove = async(req, res , next) => {
   try{
   const id = req.params.id;
-  const user = await User.findOne({_id : id});
+  const user = await User.findOneAndDelete({_id : id});
   if(!user){
     next({
       message : "User not found!",
