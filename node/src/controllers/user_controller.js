@@ -20,17 +20,36 @@ export const create = (req, res) => {
   });
 };
 
-export const update = (req, res) => {
+export const update = async(req, res , next) => {
+  try{
   // get id
   const id = req.params.userId;
-  const data = req.body;
+  const {first_name , last_name} = req.body;
   // get  by id
+  const user = await User.findOne({_id : id})
+   if(!user){
+    next({
+      status :404,
+      message : "User not Found"
+    })
+  }
   // update user
-  // save
+  if(first_name){
+    user.first_name = first_name
 
+  }
+  if(last_name){
+    user.last_name = last_name
+  }
+  // save
+  await user.save()
   res.status(200).json({
     message: "user updated" + " " + id,
+    data : user
   });
+}catch(error){
+  next(error);
+}
 };
 
 export const getByid = async(req, res , next) => {
