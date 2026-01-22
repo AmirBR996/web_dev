@@ -2,18 +2,19 @@ import Task from "../models/task_model.js";
 
 export const create_task = async (req, res, next) => {
   try {
-    let { title, text, priority, user } = req.body;
-
+    let { title, text, priority, user , pinned } = req.body;
     if (!title) throw new Error("Title is required");
     if (!text) throw new Error("Task text is required");
     if (!priority) throw new Error("Priority is required");
     if (!user) throw new Error("User is required");
+    if (!pinned) throw new Error("Pinned is required");
     priority = priority.toLowerCase()
     const task = await Task.create({
       title,
       text,
       priority,
-      user
+      user,
+      pinned
     });
 
     res.status(201).json({
@@ -63,7 +64,7 @@ export const get_by_id = async(req,res,next) => {
 export const delete_task = async(req , res , next) => {
   try{
   const user = req.params.user;
-  const task = await Task.findOneAndDelete({user : user});
+  const task = await Task.findOne({user : user});
   if(!user){
     next({
       message : "User task not found!",
@@ -71,9 +72,11 @@ export const delete_task = async(req , res , next) => {
     })
     return
   }
+  await task.deleteOne()
+
   res.status(200).json({
-    message: `id: ${req.params.id} deleted`,
-    task : task
+    message: `user: ${user}  tasks deleted`,
+    data : null
   });
   }catch(error){
     next(error);
@@ -82,23 +85,20 @@ export const delete_task = async(req , res , next) => {
 
 export const update_task = async (req, res, next) => {
   try {
-  
-    const user = req.params.user; // from auth middleware
 
+    const user = req.params.user; 
     const task = await Task.findOne({user : user});
-
     if (!task) {
       return next({
         message: "Task not found or unauthorized",
         status: 404
       });
     }
-
-    const { title, text, priority } = req.body;
-
+    const { title, text, priority , pinned } = req.body;
     if (title) task.title = title;
     if (text) task.text = text;
     if (priority) task.priority = priority.toLowerCase();
+    if (pinned) task.pinned = pinned;
 
     await task.save();
 
@@ -111,3 +111,21 @@ export const update_task = async (req, res, next) => {
     next(error);
   }
 };
+
+export const pinned_task = async(req , res , next) => {
+    try{
+        const tasks = await Task.find()
+        if(tasks.pinned == True){
+         res.status(200).json({
+         message: "Tasks fetched",
+         data: tasks,
+         success: true
+         })
+        }else{
+          message : "No data in the pin"
+         }
+    }catch(error){
+        next(error);
+    }
+}
+

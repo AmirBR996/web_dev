@@ -17,6 +17,11 @@ const taskSchema = new mongoose.Schema(
       enum: ["high", "medium", "low"],
       default: "low"
     },
+    pinned:{
+      type : Boolean,
+      required : true , 
+      default : False
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
