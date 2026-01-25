@@ -2,6 +2,7 @@
 // npm i express 
 import express from 'express'
 import http from 'http'
+import 'dotenv/config'
 import authRoutes from "./routes/auth.routes.js"
 import userRoutes from "./routes/user.routes.js"
 import taskRoutes from "./routes/task.routes.js"

@@ -20,7 +20,7 @@ const taskSchema = new mongoose.Schema(
     pinned:{
       type : Boolean,
       required : true , 
-      default : False
+      default : false
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

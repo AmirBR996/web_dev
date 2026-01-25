@@ -13,5 +13,4 @@ router.get("/:user" , get_by_id)
 router.delete("/:user" , delete_task)
 
 router.get("/:user" , pinned_task)
-
 export default router;
