@@ -27,6 +27,7 @@ export const create_task = async (req, res, next) => {
   }
 };
 
+
 export const get_all = async(req , res , next) => {
     try{
         const tasks = await Task.find()

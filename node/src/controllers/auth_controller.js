@@ -1,8 +1,9 @@
 import  {hashPassword}  from "../utils/bcrypt.utils.js"
 import { comparePassword } from "../utils/bcrypt.utils.js"
 import User from "../models/user.model.js"
+import { generateToken } from "../utils/jwt.utils.js"
 // register user
-export const register = async (req , res) =>{
+export const register = async (req , res , next) =>{
     try{
     const {first_name , last_name , email , password} = req.body
     if(!first_name){
@@ -33,7 +34,7 @@ export const register = async (req , res) =>{
 }
 }
 // login
-export const login = async(req,res) =>{
+export const login = async(req,res , next) =>{
     try{
         const {email , password} = req.body;
         if(!email){
@@ -50,8 +51,16 @@ export const login = async(req,res) =>{
         if(!is_pass_matched){
             throw new Error("Invalid email or password")
         }
+        const access_token = generateToken({
+            id : user._id,
+            email : user.email,
+            first_name : user.first_name,
+            last_name : user.last_name
+        })
         res.status(201).json({
-            message : "Loggedin"
+            message : "Loggedin",
+            data : user,
+            access_token : access_token
         });
     }catch(error){
      res.status(500).json({
