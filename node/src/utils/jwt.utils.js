@@ -5,7 +5,6 @@ export const generateToken =(payload)=>{
     )
 
 }
-
 export const verifyToken = (token) =>{
     return jwt.verify(token , "hdf@hjfjd")
 }

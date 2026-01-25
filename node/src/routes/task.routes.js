@@ -3,15 +3,15 @@ import { create_task , get_all , get_by_id ,delete_task ,update_task , pinned_ta
 import { authenticate } from "../middlewares/auth_middleware.js";
 const router = express.Router()
 // CRUD
-router.get("/" , get_all)
+router.get("/" , authenticate,get_all)
 
-router.post("/" , authenticate , create_task)
+router.post("/" , authenticate,create_task)
 
-router.put("/:user" , update_task)
+router.put("/:user" , authenticate,update_task)
 
-router.get("/:user" , get_by_id)
+router.get("/:user" , authenticate,get_by_id)
 
-router.delete("/:user" , delete_task)
+router.delete("/:user" , authenticate,delete_task)
 
-router.get("/:user" , pinned_task)
+router.get("/:user" , authenticate,pinned_task)
 export default router;

@@ -1,5 +1,5 @@
 import { verifyToken } from "../utils/jwt.utils.js"
-
+import User from "../models/user.model.js"
 export const authenticate = async(req , res , next) => {
     try{
     //   get access token from auth user
@@ -31,7 +31,7 @@ export const authenticate = async(req , res , next) => {
         )
         return
     }
-    const user = await User.findone({_id : decoded_data.id , email : decoded_data.email})
+    const user = await User.findOne({_id : decoded_data.id , email : decoded_data.email})
     if(!user){
         next({
             status : 401 ,
@@ -42,7 +42,7 @@ export const authenticate = async(req , res , next) => {
         id : user._id,
         email : user.email,
     }
-
+    next()
     }catch(error){
         next(error)
     }

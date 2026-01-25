@@ -30,7 +30,8 @@ export const create_task = async (req, res, next) => {
 
 export const get_all = async(req , res , next) => {
     try{
-        const tasks = await Task.find()
+        const user = req.user.id
+        const tasks = await Task.find({user : user}).populate("user")
          res.status(200).json({
          message: "Tasks fetched",
          data: tasks,
@@ -45,7 +46,7 @@ export const get_all = async(req , res , next) => {
 export const get_by_id = async(req,res,next) => {
     try{
       const user = req.params.user;
-      const task = await Task.findOne({user : user})
+      const task = await Task.findOne({user})
       
       if(!user){
     next({
@@ -86,8 +87,7 @@ export const delete_task = async(req , res , next) => {
 
 export const update_task = async (req, res, next) => {
   try {
-
-    const user = req.params.user; 
+    const user = req.user.id; 
     const task = await Task.findOne({user : user});
     if (!task) {
       return next({
