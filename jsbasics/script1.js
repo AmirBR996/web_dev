@@ -1,5 +1,3 @@
-const { jsx } = require("react/jsx-runtime");
-
 // console.log("Uncle is beautiful")
 const paisa = 10;
 let a = 19;
