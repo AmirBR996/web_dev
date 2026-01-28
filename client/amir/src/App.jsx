@@ -5,6 +5,7 @@ import './App.css'
 import { Component } from './components/component.jsx'
 import { Greet } from './components/greet.jsx'
 import RegisterPage from './pages/register.page.jsx'
+import LoginPage from './pages/login.page.jsx'
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
   return (
         <main className = "h-screen min-w-full tracking-wider">
           <RegisterPage />
+          <LoginPage />
         </main>
   )
 }
