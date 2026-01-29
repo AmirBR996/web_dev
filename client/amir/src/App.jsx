@@ -1,19 +1,18 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import { Component } from './components/component.jsx'
-import { Greet } from './components/greet.jsx'
 import RegisterPage from './pages/register.page.jsx'
 import LoginPage from './pages/login.page.jsx'
-
-
+import Task_register from './pages/form_register.page.jsx'
+import {BrowserRouter , Routes , Route} from "react-router"
 function App() {
 
   return (
         <main className = "h-screen min-w-full tracking-wider">
-          <RegisterPage />
-          <LoginPage />
+          <BrowserRouter>
+          <Routes>
+            <Route path = "/login" element ={ <LoginPage/>} />
+            <Route path = "/register" element = { <RegisterPage/> } />
+          </Routes>
+          </BrowserRouter>
         </main>
   )
 }
