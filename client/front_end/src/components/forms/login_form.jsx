@@ -1,21 +1,24 @@
 import React, { useState } from "react";
 
 export const Login_form = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, SetFormdata] = useState({
+    email: "",
+    password: "",
+  });
 
-  const onEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
+  const { email, password } = formData;
 
-  const onPasswordChange = (event) => {
-    setPassword(event.target.value);
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    SetFormdata({
+      ...formData,
+      [name]: value,
+    });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
+    console.log(formData); 
   };
 
   return (
@@ -28,10 +31,11 @@ export const Login_form = () => {
           <input
             className="border px-2 py-2.5 border-red-500 rounded-md focus:outline-red-700"
             id="Email"
+            name="email"
             placeholder="example@gmail.com"
             type="email"
             value={email}
-            onChange={onEmailChange}
+            onChange={handleChange}
             required
           />
         </div>
@@ -44,8 +48,9 @@ export const Login_form = () => {
             id="Password"
             placeholder="Enter Password"
             type="password"
+            name="password"
             value={password}
-            onChange={onPasswordChange}
+            onChange={handleChange}
             required
           />
         </div>
