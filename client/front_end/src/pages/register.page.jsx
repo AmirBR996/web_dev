@@ -1,6 +1,6 @@
 // rafce
 import React from "react";
-import { RegisterForm } from "../components/forms/register.form.jsx";
+import  RegisterForm  from "../components/forms/register.form.jsx";
 import { Link } from "react-router";
 
 const RegisterPage = () => {
