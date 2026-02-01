@@ -8,6 +8,7 @@ import userRoutes from "./routes/user.routes.js"
 import taskRoutes from "./routes/task.routes.js"
 import {connectDb} from "./config/db.config.js"
 import {errorHandler} from "./middlewares/errorhandler.middleware.js"
+import cors from "cors";
 // express app instance
 const app = express()
 
@@ -16,6 +17,9 @@ app.use(express.json())
 // database connection
 connectDb()
 
+app.use(cors({
+    origin: "*"
+}))
 // http server
 const server = http.createServer(app)
  

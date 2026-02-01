@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { login } from "../../api/auth.api.js";
 export const Login_form = () => {
   const [formData, SetFormdata] = useState({
     email: "",
@@ -16,9 +16,15 @@ export const Login_form = () => {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
+    try{
     event.preventDefault();
     console.log(formData); 
+    const response = await login(formData)
+    console.log("on submit" , response)
+    }catch(error){
+      console.log(error);
+    }
   };
 
   return (
@@ -34,7 +40,7 @@ export const Login_form = () => {
             name="email"
             placeholder="example@gmail.com"
             type="email"
-            value={email}
+            value={formData.email}
             onChange={handleChange}
             required
           />
@@ -49,7 +55,7 @@ export const Login_form = () => {
             placeholder="Enter Password"
             type="password"
             name="password"
-            value={password}
+            value={formData.password}
             onChange={handleChange}
             required
           />
