@@ -5,7 +5,7 @@ import UserProfile from "./user-profile";
 
 const Navbar = () => {
   return (
-    <header className="sticky top-0 z-50 bg-red-400 backdrop-blur border-b border-gray-200">
+    <header className="sticky top-0 z-50 bg-red-500 backdrop-blur border-b border-gray-200">
       <nav className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
 
         {/* Left: Logo + Nav */}
@@ -25,7 +25,7 @@ const Navbar = () => {
             <IoMdSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
-              placeholder="Search projects, teams..."
+              placeholder="Search Task ... "
               className="w-full pl-10 pr-4 py-2 text-sm rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             />
           </div>
