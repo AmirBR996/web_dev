@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { login } from "../../api/auth.api.js";
 import { useNavigate } from "react-router";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"; // Eye icons
-
+import {toast} from "react-hot-toast"
 export const Login_form = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -19,20 +19,39 @@ export const Login_form = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setError(""); // reset error
-    try {
-      const response = await login(formData);
-      if (response.data?.access_token) {
-        localStorage.setItem("access_token", response.access_token);
-        navigate("/", { replace: true });
-      }
-    } catch (err) {
-      console.log(err);
-      setError(err.response?.data?.message || "Login failed. Please try again.");
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  setError("");
+
+  try {
+    const response = await login(formData);
+
+    if (response?.data?.access_token) {
+      // ✅ save token correctly
+      localStorage.setItem(
+        "access_token",
+        response.data.access_token
+      );
+
+      // ✅ success toast
+      toast.success(
+        response?.data?.message || "Login successful"
+      );
+
+      navigate("/", { replace: true });
     }
-  };
+  } catch (err) {
+    console.log(err);
+
+    const msg =
+      err?.response?.data?.message ||
+      "Login failed. Please try again.";
+
+    setError(msg);
+    toast.error(msg);
+  }
+};
+
 
   return (
     <div className="mt-10 max-w-md mx-auto bg-white p-6 rounded-2xl shadow-lg">-

@@ -19,3 +19,15 @@ export const register = async(data) => {
         console.log(error)
     }
 }
+
+export const getUserdetail = async(req , res , next) => {
+    try{ 
+      const response = await api.get("/auth/user-detail")
+    }catch(error){
+       next(error)
+    }
+}
+
+
+
+// make profile in homepage

@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { register } from "../../api/auth.api";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router";
 
 const RegisterForm = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -24,8 +28,9 @@ const RegisterForm = () => {
     e.preventDefault();
     setError("");
 
+    // ✅ confirm password check
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
@@ -33,15 +38,20 @@ const RegisterForm = () => {
       setLoading(true);
 
       const payload = { first_name, last_name, email, password };
-      const res = await register(payload);
+      const response = await register(payload);
 
-      console.log("Register success:", res);
-      // navigate("/login") or show toast
-
-    } catch (err) {
-      setError(
-        err?.response?.data?.message || "Registration failed. Try again."
+      // ✅ success toast from backend
+      toast.success(
+        response?.data?.message || "Account created successfully"
       );
+
+      navigate("/");
+    } catch (err) { 
+      const msg =
+        err?.response?.data?.message || "Something went wrong";
+
+      toast.error(msg);
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -95,7 +105,9 @@ const RegisterForm = () => {
         />
 
         {error && (
-          <p className="text-sm text-red-500 font-medium">{error}</p>
+          <p className="text-sm text-red-500 font-medium">
+            {error}
+          </p>
         )}
 
         <button
@@ -111,7 +123,7 @@ const RegisterForm = () => {
   );
 };
 
-/* Reusable input (clean + scalable) */
+/* Reusable input */
 const Input = ({ label, ...props }) => (
   <div className="flex flex-col gap-1">
     <label className="text-sm font-medium text-gray-700">

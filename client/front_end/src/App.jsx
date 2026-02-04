@@ -4,6 +4,8 @@ import LoginPage from './pages/login.page.jsx'
 import {BrowserRouter , Routes , Route} from "react-router"
 import Homepage from './pages/home.page.jsx'
 import Notfound from './pages/not_found.jsx'
+import {Toaster}  from "react-hot-toast"
+
 function App() {
 
   return (
@@ -19,6 +21,7 @@ function App() {
 
           </Routes>
           </BrowserRouter>
+          <Toaster/>
         </main>
   )
 }

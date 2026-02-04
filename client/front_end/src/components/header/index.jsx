@@ -5,7 +5,7 @@ import UserProfile from "./user-profile";
 
 const Navbar = () => {
   return (
-    <header className="sticky top-0 z-50 bg-red-500 backdrop-blur border-b border-gray-200">
+  <header className="sticky top-0 z-50 bg-red-500 backdrop-blur border-b border-gray-200">
       <nav className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
 
         {/* Left: Logo + Nav */}
