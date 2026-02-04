@@ -1,10 +1,12 @@
-// component
-// Rules : start with Capital letter , return jsx , contain single wrapper 
+const Component = () =>{
 
-export const Component = () => {
   return (
-    <div>
-      <h1>Hello From Component</h1>
-    </div>
+   <div>
+     <h1>Hello from component</h1>
+   </div> 
   )
+
 }
+
+export default Component
+

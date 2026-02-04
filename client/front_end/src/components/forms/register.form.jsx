@@ -1,142 +1,153 @@
 import React, { useState } from "react";
 import { register } from "../../api/auth.api";
-import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router";
+import toast from "react-hot-toast";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
     email: "",
     password: "",
+    c_password: "",
   });
 
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const onChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
 
-  const { first_name, last_name, email, password } = formData;
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
-  const handleSubmit = async (e) => {
+  // submit form
+  const onSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-
-    // ✅ confirm password check
-    if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
-      return;
-    }
-
     try {
-      setLoading(true);
+      // eslint-disable-next-line no-unused-vars
+      const { c_password, ...rest } = formData;
 
-      const payload = { first_name, last_name, email, password };
-      const response = await register(payload);
-
-      // ✅ success toast from backend
-      toast.success(
-        response?.data?.message || "Account created successfully"
-      );
-
-      navigate("/");
-    } catch (err) { 
-      const msg =
-        err?.response?.data?.message || "Something went wrong";
-
-      toast.error(msg);
-      setError(msg);
-    } finally {
-      setLoading(false);
+      const response = await register(rest);
+      if (response && response.data) {
+        toast.success(response.message || "Account created");
+        // navigate to login
+        navigate("/login");
+      }
+      console.log(response);
+    } catch (error) {
+      toast.error(error.message || "Something went wrong");
+      console.log(error);
     }
   };
 
   return (
-    <div className="mt-10 max-w-md mx-auto">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-xl border shadow-sm flex flex-col gap-4"
-      >
-        <h2 className="text-xl font-semibold text-gray-800">
-          Create your account
-        </h2>
+    <div className="mt-10 ">
+      <form onSubmit={onSubmit} className="flex flex-col gap-3">
+        {/* first name */}
+        <div className="flex flex-col gap-1">
+          {/* label */}
+          <label className="text-[16px] font-semibold" htmlFor="first_name">
+            First Name
+          </label>
+          {/* input */}
+          <input
+            onChange={onChange}
+            name="first_name"
+            className="border border-gray-400 px-2 py-2.5 rounded-md focus:outline-blue-400"
+            id="first_name"
+            type="text"
+            placeholder="John"
+            required
+          />
+        </div>
 
-        <Input
-          label="First Name"
-          name="first_name"
-          value={first_name}
-          onChange={handleChange}
-        />
+        {/* last  name */}
+        <div className="flex flex-col gap-1">
+          {/* label */}
+          <label className="text-[16px] font-semibold" htmlFor="last_name">
+            Last Name
+          </label>
+          {/* input */}
+          <input
+            onChange={onChange}
+            name="last_name"
+            className="border border-gray-400 px-2 py-2.5 rounded-md focus:outline-blue-400"
+            id="last_name"
+            type="text"
+            placeholder="Doe"
+            required
+          />
+        </div>
 
-        <Input
-          label="Last Name"
-          name="last_name"
-          value={last_name}
-          onChange={handleChange}
-        />
+        {/* email */}
+        <div className="flex flex-col gap-1">
+          {/* label */}
+          <label className="text-[16px] font-semibold" htmlFor="email">
+            Email
+          </label>
+          {/* input */}
+          <input
+            onChange={onChange}
+            name="email"
+            className="border border-gray-400 px-2 py-2.5 rounded-md focus:outline-blue-400"
+            id="email"
+            type="email"
+            placeholder="johndoe@example.com"
+            required
+          />
+        </div>
 
-        <Input
-          label="Email"
-          name="email"
-          type="email"
-          value={email}
-          onChange={handleChange}
-        />
+        {/* password */}
+        <div className="flex flex-col gap-1">
+          {/* label */}
+          <label className="text-[16px] font-semibold" htmlFor="password">
+            Password
+          </label>
+          {/* input */}
+          <input
+            onChange={onChange}
+            name="password"
+            className="border border-gray-400 px-2 py-2.5 rounded-md focus:outline-blue-400"
+            id="password"
+            type="password"
+            placeholder="enter password"
+            required
+          />
+        </div>
 
-        <Input
-          label="Password"
-          name="password"
-          type="password"
-          value={password}
-          onChange={handleChange}
-        />
+        {/*retype  password */}
+        <div className="flex flex-col gap-1">
+          {/* label */}
+          <label className="text-[16px] font-semibold" htmlFor="c_password">
+            Re-type Password
+          </label>
+          {/* input */}
+          <input
+            onChange={onChange}
+            name="c_password"
+            className="border border-gray-400 px-2 py-2.5 rounded-md focus:outline-blue-400"
+            id="c_password"
+            type="password"
+            placeholder="retype password"
+            required
+          />
+        </div>
 
-        <Input
-          label="Confirm Password"
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-
-        {error && (
-          <p className="text-sm text-red-500 font-medium">
-            {error}
-          </p>
-        )}
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-red-500 text-white py-3 rounded-lg font-medium
-                     hover:bg-red-600 transition disabled:opacity-60"
-        >
-          {loading ? "Creating account..." : "Create account"}
-        </button>
+        {/* submit button */}
+        <div className="w-full mt-4">
+          <button
+            className="w-full bg-blue-600 py-3.5 text-white font-bold rounded-sm cursor-pointer"
+            type="submit"
+          >
+            Create Account
+          </button>
+        </div>
       </form>
     </div>
   );
 };
-
-/* Reusable input */
-const Input = ({ label, ...props }) => (
-  <div className="flex flex-col gap-1">
-    <label className="text-sm font-medium text-gray-700">
-      {label}
-    </label>
-    <input
-      {...props}
-      required
-      className="border border-gray-300 rounded-lg px-3 py-2.5 text-sm
-                 focus:outline-none focus:ring-2 focus:ring-red-500
-                 transition"
-    />
-  </div>
-);
 
 export default RegisterForm;

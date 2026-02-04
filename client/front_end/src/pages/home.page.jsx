@@ -1,73 +1,115 @@
-import React, { useState } from "react";
-import Navbar from "../components/header/index.jsx";
+/* eslint-disable react-hooks/set-state-in-effect */
+import NavBar from "../components/header";
 import { IoMdAdd } from "react-icons/io";
-import Card from "../components/card.jsx";
-import Register_Task from "../components/forms/task_from.jsx";
+import Card from "../components/tasks/card";
+import AddEditTask from "../components/forms/task.form";
 import Modal from "react-modal";
-
-Modal.setAppElement("#root"); // for accessibility
-
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { getUserDetail } from "../api/auth.api";
+import { useNavigate } from "react-router";
+import { getAllTask } from "../api/task.api";
 const Homepage = () => {
-  const [addModal, setAddModal] = useState({
+  const [userInfo, setUserInfo] = useState(null);
+  const [tasks, setTasks] = useState(null);
+  const navigate = useNavigate();
+  const [isAddModalOpen, setAddModalOpen] = useState({
     type: "add",
     data: null,
-    isOpen: false
+    isOpen: false,
   });
-const openAddModal = ()=>{
-  setAddModal({
-    type : "add",
-    data : null,
-    isOpen : true
-  })
-}
+
+  const openAddModal = () => {
+    setAddModalOpen({
+      type: "add",
+      data: null,
+      isOpen: true,
+    });
+  };
+
+  const onClose = () => {
+    setAddModalOpen({
+      type: "add",
+      data: null,
+      isOpen: false,
+    });
+  };
+
+  // get user detail
+  const getProfile = async () => {
+    try {
+      const user = await getUserDetail();
+      if (user.data) {
+        setUserInfo(() => {
+          return user.data;
+        });
+      }
+      console.log(user);
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.data?.message || "Something went wrong");
+      if (error?.status === 401) {
+        navigate("/login");
+      }
+    }
+  };
+
+  // get tasks
+  const getTasks = async () => {
+    try {
+      const response = await getAllTask();
+      // store tasks in state
+      setTasks(response.data);
+    } catch (error) {
+      toast.error(error?.message || "Something went wrong");
+    }
+  };
+
+  // fetch user when page loads
+  useEffect(() => {
+    getTasks();
+    getProfile();
+  }, []);
+
   return (
-    <main className="min-h-screen w-full bg-gray-100">
-      <Navbar />
+    <main className="h-full w-full ">
+      <NavBar userInfo={userInfo} />
+      {/* task list */}
+      {tasks && tasks.length > 0 && (
+        <div className="grid grid-cols-3 gap-6 mt-10">
+          {tasks.map((task) => {
+            return <Card key={task._id} task={task}/>;
+          })}
+        </div>
+      )}
 
-      {/* Task list */}
-      <div className="max-w-5xl mx-auto px-4 py-6 grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-      </div>
-
-      {/* Add Task Modal */}
-    {/* Add Task Modal */}
-<Modal
-  isOpen={addModal.isOpen}
-  onRequestClose={() => setAddModal({ ...addModal, isOpen: false })}
-  contentLabel="Add Task"
-  style={{
-    overlay: {
-      backgroundColor: "rgba(0,0,0,0.3)",
-    },
-  }}
-  className="max-w-lg w-full mx-auto mt-20 bg-white rounded-2xl shadow-lg p-6 outline-none relative"
-  overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center z-50"
->
-  {/* Close X button at top-right */}
-  <button
-    onClick={() => setAddModal({ ...addModal, isOpen: false })}
-    className="absolute top-4 right-4 text-gray-500 hover:text-red-500 transition text-xl font-bold"
-    aria-label="Close modal"
-  >
-    &times;
-  </button>
-
-  <Register_Task />
-</Modal>
-
-      {/* Add new task button */}
+      {/* add new task button */}
       <button
-        title="Add New Task"
         onClick={openAddModal}
-        className="h-14 w-14 rounded-full bg-red-500 text-white font-bold flex items-center justify-center fixed bottom-8 right-8 shadow-lg hover:bg-red-600 transition-colors"
+        title="Add New Note"
+        className="fixed bottom-30 right-50 h-13 aspect-square rounded-md bg-blue-500 text-white font-bold cursor-pointer flex items-center justify-center"
       >
-        <IoMdAdd size={28} />
+        <IoMdAdd size={24} className="font-bold" />
       </button>
+
+      {/* add edit task */}
+
+      <Modal
+        isOpen={isAddModalOpen.isOpen}
+        onRequestClose={onClose}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0,0,0,0.2)",
+          },
+        }}
+        className={"w-[40%] h-fit mx-auto mt-16 "}
+      >
+        <AddEditTask
+          data={isAddModalOpen.data}
+          type={isAddModalOpen.type}
+          onClose={onClose}
+        />
+      </Modal>
     </main>
   );
 };

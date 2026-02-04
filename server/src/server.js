@@ -1,50 +1,102 @@
-// npm init for package
-// npm i express 
-import express from 'express'
-import http from 'http'
 import 'dotenv/config'
-import authRoutes from "./routes/auth.routes.js"
-import userRoutes from "./routes/user.routes.js"
-import taskRoutes from "./routes/task.routes.js"
-import {connectDb} from "./config/db.config.js"
-import {errorHandler} from "./middlewares/errorhandler.middleware.js"
-import cors from "cors";
-// express app instance
-const app = express()
+import express from "express";
+import http from "http";
+import cors from 'cors';
 
-app.use(express.json()) 
+import { connectDb } from "./config/db.config.js";
+import { errorHandler } from "./middlewares/errorhandler.middleware.js";
 
-// database connection
-connectDb()
+//! importing routes
+import userRoutes from "./routes/user.routes.js";
+import authRoutes from "./routes/auth.routes.js";
+import taskRoutes from './routes/task.routes.js'
 
+
+//! express app instance
+const app = express();
+
+//! database connection
+connectDb();
+//! using middleware
 app.use(cors({
-    origin: "*"
-}))
+  origin: 'http://localhost:5173',
+  credentials: true,
+}));
+
+app.use(express.json());
+
 // http server
-const server = http.createServer(app)
- 
+const server = http.createServer(app);
+
+//! middleware
 
 
 
 
-// app.use(middleware3)
-// app.use((req, res ,next) => {
-//     console.log("middleware 2")
-//     next()
-// })
 
 
-// using users
-app.use('/users',userRoutes)
-// using auth
-app.use('/auth',authRoutes)
-// using task
-app.use("/task",taskRoutes)
 
-server.listen(8000 , ()=>{
-    console.log("server is running at http://localhost:8000")
-})
-// req.body => data
-// req.params <= object
+app.get("/", (req, res) => {
+  // console.log(req)
+
+  res.status(200).json({
+    message: "Hello from server!!!",
+  });
+});
+
+//! using routes
+app.use("/users", userRoutes);
+app.use("/auth", authRoutes);
+app.use("/tasks", taskRoutes);
+
+//
+server.listen(8000, () => {
+  console.log(`server is running at http://localhost:8000`);
+});
+
+
+
 
 app.use(errorHandler)
+
+
+
+//! rest api
+//* api => application programming interface.
+//* rest => representational state tranfer
+// 1. stateless
+// 2. resources -> uniform resouces
+// 3. unifom interface  => /users
+// 4. GET , POST ,PUT/PATCH , DELETE
+// 5. staus code
+//   100-199 -> informational response
+//   200-299 -> success  200 201 ,
+//   300-399 -> redirectional
+//   400-499->  client error  400 401 403 ,404
+//   500-599 -> server error 500 501 503
+
+// scalable
+// layered
+
+// CRUD ->
+// endpoint
+
+//? req.body => data
+//? req.params <- object
+
+//!api /controller
+//! middleware
+//!function  -> req obj , res obj & next function
+//! can implement custom logic
+//! can modify req res object
+//! end req res cycle
+//! call next middleware
+
+//types
+// 1. application level
+// 2. route level
+// 3. error handler -> err , req, res , next
+
+
+
+// server req -> middleware  -> mid2 -> mid3 ->.....  -> api

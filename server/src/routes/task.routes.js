@@ -1,17 +1,28 @@
-import express from "express";
-import { create_task , get_all , get_by_id ,delete_task ,update_task , pinned_task} from "../controllers/task.controller.js";
-import { authenticate } from "../middlewares/auth_middleware.js";
+import express from 'express'
+import { create, getAll, getById,update,remove } from '../controllers/task.controller.js';
+import { authenticate } from '../middlewares/auth.middleware.js';
+
 const router = express.Router()
-// CRUD
-router.get("/" , authenticate,get_all)
 
-router.post("/" , authenticate,create_task)
 
-router.put("/:user" , authenticate,update_task)
+//! get all tasks
+router.get('/',authenticate,getAll)
 
-router.get("/:user" , authenticate,get_by_id)
+//! get by id
+router.get('/:id',authenticate,getById)
 
-router.delete("/:user" , authenticate,delete_task)
+//! create 
+router.post('/',authenticate ,create)
 
-router.get("/:user" , authenticate,pinned_task)
+//!update
+router.put('/:id',authenticate,update)
+
+//! delete
+router.delete('/:id',authenticate,remove)
+
+//! pin task
+
+//! get all pinned task
+
+
 export default router;

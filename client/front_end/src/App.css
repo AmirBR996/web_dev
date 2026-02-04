@@ -1,7 +1,9 @@
 @import "tailwindcss";
+
 #root {
-  /* background-color: rgb(244, 247, 244);
-  background-color: rgb(211, 214, 214); */
-  color : rgb(10, 10, 10) ; 
-  margin: 0  auto;
+  max-width: 1440px;
+  min-height: 100vh;
+  background-color: #ffffff;
+  color:#030303;
+  margin: 0 auto;
 }

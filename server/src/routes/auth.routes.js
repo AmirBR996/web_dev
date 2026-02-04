@@ -1,11 +1,23 @@
-import express from "express";
-import {register , login} from "../controllers/auth_controller.js"
-const router = express.Router();
+import express from 'express'
+import {
+  getUserDetail,
+  login,
+  register,
+} from "../controllers/auth.controller.js";
+import { authenticate } from "../middlewares/auth.middleware.js";
 
-const middleware = (req, res , next) =>{
-    console.log("route level")
-    next()
-}
-router.post("/register",register)
-router.post("/login", middleware , middleware , middleware ,login)
+
+const router = express.Router()
+
+
+// register route
+router.post('/register',register);
+
+// login 
+router.post('/login',login)
+
+// user detail
+router.get('/user-detail',authenticate,getUserDetail)
+
+
 export default router

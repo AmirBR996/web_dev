@@ -1,10 +1,10 @@
+
+
 export const Greet = (props) =>{
-    console.log(props['user'])
-    return(
+    console.log(props)
+    return (
         <div>
-            <h1>Hello </h1>
-            hello {props['user']} vai
-            {/* {props.user} */}
+            <h1>Hello {props.user}</h1>
         </div>
     )
 }
